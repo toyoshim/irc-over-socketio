@@ -1,0 +1,30 @@
+# Copyright (c) 2012, Takashi Toyoshima <toyoshim@gmail.com>
+# All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be found
+# in the LICENSE file.
+
+Server setup for heroku
+
+1. Checkout libraries
+ $ make checkout
+
+2. Try to run in local machine (optional)
+ $ cd server
+ $ PASSWORD=<password> node app.js
+
+3. Create and setup heroku account.
+ See https://devcenter.heroku.com/articles/nodejs
+
+4. Deploy server as http://<name>.herokuapp.com:80/.
+ $ cd server
+ $ git init
+ $ echo node_modules > .gitignore
+ $ git add .
+ $ git commit -m "deploy to heroku"
+ $ heroku create --stack cedar
+ $ heroku rename <name>
+ $ heroku config:add PASSWORD=<password>
+ $ heroku ps:scale web=1
+ $ git push heroku master
+ $ heroku logs
+
