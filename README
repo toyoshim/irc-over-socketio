@@ -9,8 +9,7 @@ Server setup for heroku
  $ make checkout
 
 2. Try to run in local machine (optional)
- $ cd server
- $ PASSWORD=<password> node app.js
+ $ make run
 
 3. Create and setup heroku account.
  See https://devcenter.heroku.com/articles/nodejs
@@ -18,7 +17,6 @@ Server setup for heroku
 4. Deploy server as http://<name>.herokuapp.com:80/.
  $ cd server
  $ git init
- $ echo node_modules > .gitignore
  $ git add .
  $ git commit -m "deploy to heroku"
  $ heroku create --stack cedar
