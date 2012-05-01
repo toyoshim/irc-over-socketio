@@ -1,0 +1,17 @@
+{
+  "name": "IRC over Socket.IO",
+  "description": "IRC over Socket.IO",
+  "version": "0.9.0",
+  "app": {
+    "launch": {
+      "local_path": "app.html"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "128": "icon.png"
+  },
+  "permissions": [
+    "http://*/*"
+  ]
+}

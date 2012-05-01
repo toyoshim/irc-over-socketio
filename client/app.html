@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns="http://www.w3.org/1999/html">
+<!--
+Copyright (c) 2012, Takashi Toyoshima <toyoshim@gmail.com>
+All rights reserved.
+Use of this source code is governed by a BSD-style license that can be found
+in the LICENSE file.
+-->
+<head>
+    <meta charset="UTF-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="icon.png">
+    <title>IRC over Socket.IO</title>
+    <style>
+        body {
+            padding-top: 60px;
+        }
+    </style>
+    <script>exports = {}</script>
+    <script src="jquery.min.js"></script>
+    <script src="socket.io.min.js"></script>
+    <script src="MD5.js"></script>
+    <script src="irc.js"></script>
+    <script src="guirc.js"></script>
+    <script src="gui.js"></script>
+    <script src="setting.js"></script>
+</head>
+
+<body>
+<!-- --------------------------------------------------------------------------
+// Navigation menu bar;
+// [IRC over Socket.IO] [メイン] [設定]
+--------------------------------------------------------------------------- -->
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="#about" onclick="activatePage(0);">IRC over Socket.IO</a>
+            <div class="nav-collapse">
+                <ul id="main-menu" class="nav">
+                    <li><a href="#main" onclick="activatePage(1);"><i class="icon-comment icon-white"></i>メイン</a></li>
+                    <li class="active"><a href="#config" onclick="activatePage(2);"><i class="icon-cog icon-white"></i>設定</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- --------------------------------------------------------------------------
+// Page 0; IRC over Socket.IO
+--------------------------------------------------------------------------- -->
+<div class="container-fluid" style="display: none;">
+    <div class="container">
+        <div class="row">
+        <div class="span8">
+            <div class="page-header">
+                <h1>
+                    IRC over Socket.IO&nbsp;
+                    <small>version 0.9.0 &copy 2012 Takashi Toyoshima</small>
+                </h1>
+            </div>
+        </div>
+            <div class="span6 well">
+                <h2>New BSD License</h2>
+                <p>Copyright &copy 2012, Takashi Toyoshima &lt;toyoshim@gmail.com&gt;
+                <p>All rights reserved.
+                <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+                <ul>
+                    <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li>
+                    <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
+                </ul>
+                <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+            </div>
+            <div class="span8">
+                <div class="page-header">
+                    <h1>
+                        Socket.IO&nbsp;
+                        <small>version 0.6.18 &copy 2012 LearnBoost</small>
+                    </h1>
+                </div>
+            </div>
+            <div class="span6 well">
+                <h2>MIT License</h2>
+                <p>Copyright &copy 2012 LearnBoost
+                <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+            </div>
+            <div class="span8">
+                <div class="page-header">
+                    <h1>
+                        Twitter Bootstrap&nbsp;
+                        <small>version 2.0.3 &copy 2012 Twitter, Inc.</small>
+                    </h1>
+                </div>
+            </div>
+            <div class="span6 well">
+                <h2>Apache License v2.0</h2>
+                <p>Copyright 2012 Twitter, Inc.
+                <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+                <blockquote>
+                    <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_">http://www.apache.org/licenses/LICENSE-2.0</a>
+                </blockquote>
+                <p> Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+            </div>
+            <div class="span8">
+                <div class="page-header">
+                    <h1>
+                        jQuery&nbsp;
+                        <small>version 1.7.2 &copy 2012 jQuery Foundation</small>
+                    </h1>
+                </div>
+            </div>
+            <div class="span6 well">
+                <h2>MIT License</h2>
+                <p>Copyright &copy 2012 jQuery Foundation
+                <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- --------------------------------------------------------------------------
+// Page 1; メイン
+--------------------------------------------------------------------------- -->
+<div class="container-fluid" style="display: none;">
+    <div class="row-fluid">
+        <div class="span9">
+            <div id="chat" class="span9">
+                <ul id="chat-tab" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#" onclick="activateTab(0);"><i class="icon-home"></i> サーバ</a>
+                    </li>
+                </ul>
+                <h3 id="topic" style="height: 30px; overflow: auto; text-overflow: ellipsis;">&nbsp;</h3>
+                <div id="channels"><!-- channel messages -->
+                    <div></div>
+                </div>
+                <form onsubmit="postMessage(); return false;">
+                    <input id="input" type="text" class="span9" placeholder="発言する文字を入力してリターンを押してください">
+                </form>
+                <div id="log"><!-- log message -->
+                </div>
+            </div>
+        </div>
+        <div id="users" class="span3">
+            <form class="navbar-search pull-left">
+                <i class="icon-user"></i> 入室者一覧&nbsp;&nbsp;<i class="icon-search"></i>
+                <input id="search" type="text" class="search-qeury" style="width: 100px; border-radius: 12px" placeholder="検索" onkeyup="updateUsers();">
+            </form>
+            <table class="table table-condensed">
+                <!-- user list
+                <tr><td>@</td><td>toyoshim</td></tr>
+                -->
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- --------------------------------------------------------------------------
+// Page 2; 設定
+--------------------------------------------------------------------------- -->
+<div class="container" style="display: block;">
+    <div id="alert">
+    </div>
+    <form id="config" class="well form-horizontal" onsubmit="saveConfig(); return false;">
+        <fieldset>
+            <legend>プロキシ設定</legend>
+            <div class="control-group">
+                <label class="control-label">ホスト名</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span3" type="text" placeholder="必須">
+                </div>
+                <label class="control-label">ポート番号</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span2" type="number" placeholder="必須">
+                </div>
+                <label class="control-label">パスワード</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span3" type="password" placeholder="オプション" value="">
+                </div>
+            </div>
+            <legend>IRCサーバ設定</legend>
+            <div class="control-group">
+                <label class="control-label">ホスト名</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span3" type="text" placeholder="必須" value="chat.freenode.net">
+                </div>
+                <label class="control-label">ポート番号</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span2" type="number" placeholder="必須" value="6665">
+                </div>
+                <label class="control-label">パスワード</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span3" type="password" placeholder="オプション" value="">
+                </div>
+            </div>
+            <legend>ユーザー設定</legend>
+            <div class="control-group">
+                <label class="control-label">ニックネーム</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span3" type="text" placeholder="必須" value="">
+                </div>
+            </div>
+            <legend>通知設定</legend>
+            <div class="control-group">
+                <label class="control-label">キーワード</label>
+                <div class="controls docs-input-sizes">
+                    <input class="span5" type="text" placeholder="オプション（カンマ区切りで複数指定可能）" value="">
+                </div>
+            </div>
+            <hr>
+            <button type="submit" class="btn btn-primary">保存</button>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
