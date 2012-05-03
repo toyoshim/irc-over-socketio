@@ -24,7 +24,7 @@ checkout:
 	(cd third_party; wget http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js)
 	cp third_party/jquery.min.js client/
 	(cd third_party; git clone https://github.com/twitter/bootstrap.git)
-	(cd third_party/bootstrap; git checkout b261f9781bbf31f499cb55c49451dc0c0ad43062)
+	(cd third_party/bootstrap; git checkout 59503e71ff06d0fd065c2fb981f55f4651ebc274)
 	(cd third_party/bootstrap; make bootstrap)
 	mkdir -p client/css client/img
 	cp third_party/bootstrap/bootstrap/css/bootstrap-responsive.min.css client/css
