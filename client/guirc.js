@@ -32,6 +32,49 @@ GuIRC.prototype = new IRC();
 GuIRC.prototype.constructor = GuIRC;
 
 /**
+ * Adds a new user to the user list of the specified channel.
+ * @param channel {string} A target channel to modify user list.
+ * @param nick {string} A nick to be added.
+ * @return {number} An index of |channel|.
+ * @private
+ */
+GuIRC.prototype._addUser = function (channel, nick) {
+    this.channels[channel].nicks.push({ op: false, nick: nick });
+    // TODO: sortUsers() must be a member function of GuIRC.
+    sortUsers(channel);
+    // If the updating channel is the one on the active tab, we should update
+    // user list UI.
+    var index = channelIndex(channel);
+    if (index == activeTab)
+        updateUsers();
+    return index;
+};
+
+/**
+ * Removes a user from the user list of the specified channel.
+ * @param {string} channel A target channel to modify user list.
+ * @param {string} nick A nick to be removed.
+ * @return {Object.<boolean, string>} Removed user information if the user is
+ *                                    in the list. Otherwise, null.
+ *      op @type {boolean} Channel operator permission.
+ *      nick @type {string} User nick.
+ * @private
+ */
+GuIRC.prototype._removeUser = function (channel, nick) {
+    var list = this.channels[channel].nicks;
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].nick == nick) {
+            var result = list.splice(i,1);
+            var index = channelIndex(channel);
+            if (index == activeTab)
+                updateUsers();
+            return result;
+        }
+    }
+    return null;
+};
+
+/**
  * Handles a JOIN message.
  * @see IRC.prototype.handleJoin.
  */
@@ -59,39 +102,11 @@ GuIRC.prototype.handleJoin = function (nicks, channel) {
             return;
         }
         // Add new user to channel user list.
-        // TODO: Factor out adding new user operations.
-        // handleNick() has a similar sequence of operations.
-        this.channels[channel].nicks.push({ op: false, nick: nicks.nick });
-        // TODO: sortUsers() must be a member function of GuIRC.
-        sortUsers(channel);
-        // If the updating channel is the one on the active tab, we should
-        // update user list UI.
-        var index = channelIndex(channel);
-        if (index == activeTab)
-            updateUsers();
+        var index = this._addUser(channel, nicks.nick);
         // Then, show a joining message.
         // TODO: We should have a setting to emit following message.
         appendChannelMessage(index, '* ' + nicks.nick + 'が入室しました');
     }
-};
-
-/**
- * Removes a nick from user lists of the specified channel.
- * @param {string} channel Target channel to modify user list.
- * @param {string} nick Nick to be removed.
- * @return {Object.<boolean, string>} Removed user information if the user is
- *                                    in the list. Otherwise, null.
- *      op @type {boolean} Channel operator permission.
- *      nick @type {string} User nick.
- * @private
- */
-GuIRC.prototype._removeHandle = function (channel, nick) {
-    var list = this.channels[channel].nicks;
-    for (var i = 0; i < list.length; i++)
-        if (list[i].nick == nick)
-            return list.splice(i,1);
-    // TODO: Update GUI.
-    return null;
 };
 
 /**
@@ -101,21 +116,15 @@ GuIRC.prototype._removeHandle = function (channel, nick) {
 GuIRC.prototype.handleNick = function (nicks, nick) {
     // Firstly, remove all old user information which has old nick.
     for (var channel in this.channels) {
-        var target = this._removeHandle(channel, nicks.nick);
+        var target = this._removeUser(channel, nicks.nick);
         if (target) {
             // If the channel had the old nick, change it to new nick, then add
             // it to the channel again.
             target.nick = nick;
-            // TODO: Factor out.
-            this.channels[channel].nicks.push(target);
-            // TODO: sortUsers() must be a member function of GuIRC.
-            sortUsers(channel);
-            var index = channelIndex(channel);
+            var index = this._addUser(channel, nick);
             // TODO: Emit multicast to common log view.
             appendChannelMessage(index, '* ' + nicks.nick + 'がNICKを' + nick +
                     'に変更しました');
-            if (index == activeTab)
-                updateUsers();
         }
     }
 };
@@ -125,14 +134,12 @@ GuIRC.prototype.handleNick = function (nicks, nick) {
  * @see IRC.prototype.handlePart.
  */
 GuIRC.prototype.handlePart = function (nicks, channel, message) {
-    this._removeHandle(channel, nicks.nick);
-    // TODO: Move following GUI update operation to _removeHandle().
-    var index = channelIndex(channel);
-    if (index == activeTab)
-        updateUsers();
-    appendChannelMessage(index, '* ' + nicks.nick + 'が退室しました ' + '(' +
+    if (this._removeUser(channel, nicks.nick)) {
+        var index = channelIndex(channel);
+        appendChannelMessage(index, '* ' + nicks.nick + 'が退室しました ' + '(' +
             message + ')');
-    // TODO: [optional] Remove channel tab.
+        // TODO: [optional] Remove channel tab.
+    }
 };
 
 /**
@@ -160,9 +167,7 @@ GuIRC.prototype.handlePrivateMessage = function (nicks, target, message) {
                 { op: false, nick: this.nick }
             ]
         };
-        // TODO: appendChannel must return adding channel index.
-        appendChannel(nicks.nick);
-        index = channelIndex(nicks.nick);
+        index = appendChannel(nicks.nick);
         appendChannelMessage(index, nicks.nick + ' ' + message);
         // TODO: Have a config to omit following behavior?
         activateTab(index);
@@ -182,14 +187,11 @@ GuIRC.prototype.handlePrivateMessage = function (nicks, target, message) {
  */
 GuIRC.prototype.handleQuit = function (nicks, message) {
     for (var channel in this.channels) {
-        var target = this._removeHandle(channel, nicks.nick);
+        var target = this._removeUser(channel, nicks.nick);
         if (target) {
             var index = channelIndex(channel);
             appendChannelMessage(index, '* ' +
                 nicks.nick + 'がログアウトしました (' + message + ')');
-            // TODO: Factor out.
-            if (index == activeTab)
-                updateUsers();
         }
     }
 };

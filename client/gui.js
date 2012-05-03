@@ -136,6 +136,7 @@ var channelIndex = function (channel) {
 /**
  * Appends new channel tab.
  * @param channel {string} Channel name.
+ * @return {number} A channel tab index.
  */
 var appendChannel = function (channel) {
     // TODO: Handle remove icon.
@@ -149,6 +150,7 @@ var appendChannel = function (channel) {
     channels.append($('<div></div>'));
     resizeGadgets();
     activateTab(index);
+    return index;
 };
 
 /**
