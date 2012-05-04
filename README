@@ -13,16 +13,18 @@ Server setup for heroku
 2. Try to run in local machine (optional)
  $ make run
 
-3. Create and setup heroku account.
- See https://devcenter.heroku.com/articles/nodejs
+3. Create and setup heroku account with <mail address>.
+ See https://devcenter.heroku.com/articles/nodejs .
+ You may want to use following command to do git push.
+ $ ssh-keygen -t rsa -C "<mail address>"
+ $ heroku keys:add ~/.ssh/id_rsa.pub
 
 4. Deploy server as http://<name>.herokuapp.com:80/.
  $ cd server
  $ git init
  $ git add .
  $ git commit -m "deploy to heroku"
- $ heroku create --stack cedar
- $ heroku rename <name>
+ $ heroku create <name>
  $ heroku config:add PASSWORD=<password>
  $ heroku ps:scale web=1
  $ git push heroku master
