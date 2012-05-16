@@ -159,15 +159,19 @@ GuIRC.prototype.handlePrivateMessage = function (nicks, target, message) {
             console.error('private message to unknown target');
             return;
         }
-        // Open private message tab with sender nick.
-        this.channels[nicks.nick] = {
-            topic: nicks.nick + 'からのプライベートメッセージ',
-            nicks: [
-                { op: false, nick: nicks.nick },
-                { op: false, nick: this.nick }
-            ]
-        };
-        index = appendChannel(nicks.nick);
+        // Check if we already have private message tab for the nick.
+        index = channelIndex(nicks.nick);
+        if (index < 0) {
+            // Open private message tab with sender nick.
+            this.channels[nicks.nick] = {
+                topic: nicks.nick + 'からのプライベートメッセージ',
+                nicks: [
+                    { op: false, nick: nicks.nick },
+                    { op: false, nick: this.nick }
+                ]
+            };
+            index = appendChannel(nicks.nick);
+        }
         appendChannelMessage(index, nicks.nick + ' ' + message);
         // TODO: Have a config to omit following behavior?
         activateTab(index);
