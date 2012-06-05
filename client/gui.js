@@ -100,10 +100,12 @@ var getTimeString = function () {
  * @param message {string} A message to append.
  */
 var appendChannelMessage = function (index, message) {
+    // Escape tag start and end characters.
+    var escapedMessage = message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     // Append to the channel tab.
     var channel = $('#channels>div').eq(index);
     var time = getTimeString();
-    channel.append(time + ' ' + message + '<br>');
+    channel.append(time + ' ' + escapedMessage + '<br>');
     // Auto scroll.
     // TODO: Omit if the scroll position is not bottom.
     var dom = channel.get(0);
@@ -114,7 +116,7 @@ var appendChannelMessage = function (index, message) {
     var name = tab[index].getAttribute('name');
     var log = $('#log');
     var time = getTimeString();
-    log.append(time + ' <' + name + '>' + message + '<br>');
+    log.append(time + ' <' + name + '>' + escapedMessage + '<br>');
     // Auto scroll.
     var dom = log.get(0);
     dom.scrollTop = dom.scrollHeight;
