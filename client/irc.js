@@ -356,6 +356,8 @@ IRC.prototype.handleJoin = function (nicks, channel) {
  */
 IRC.prototype.handleNick = function (nicks, nick) {
     // TODO: update channel nicks.
+    if (this.nick == nicks.nick)
+        this.nick = nick;
     this.log(nicks.nick + ' changes nick to ' + nick);
 };
 

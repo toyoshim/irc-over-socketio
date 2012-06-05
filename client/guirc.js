@@ -114,6 +114,10 @@ GuIRC.prototype.handleJoin = function (nicks, channel) {
  * @see IRC.prototype.handleNick.
  */
 GuIRC.prototype.handleNick = function (nicks, nick) {
+    // If changing nick is myself, update the stored nick.
+    if (this.nick == nicks.nick)
+        this.nick = nick;
+
     // Firstly, remove all old user information which has old nick.
     for (var channel in this.channels) {
         var target = this._removeUser(channel, nicks.nick);
