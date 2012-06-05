@@ -219,6 +219,8 @@ IRC.prototype._receiveMessage = function (message) {
     } else if (command == 'NICK') {
         this.handleNick(prefix, args[1]);
     } else if (command == 'PART') {
+        if (!args[2])
+            args[2] = '';
         this.handlePart(prefix, args[1], args[2]);
     } else if (command == 'PING') {
         console.info('PING / PONG ' + args[1]);
@@ -226,6 +228,8 @@ IRC.prototype._receiveMessage = function (message) {
     } else if (command == 'PRIVMSG') {
         this.handlePrivateMessage(prefix, args[1], args[2]);
     } else if (command == 'QUIT') {
+        if (!args[1])
+            args[1] = '';
         this.handleQuit(prefix, args[1]);
     } else if (command == 'TOPIC') {
         this.handleTopic(prefix, args[1], args[2]);

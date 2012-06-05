@@ -8,7 +8,6 @@
  * GUI integration. GuIRC extends IRC to handle IRC protocol, and uses gui.js
  * functions to integrate IRC to GUI.
  * TODO: Move localStorage related codes to gui.js.
- * TODO: i18n.
  * @author Takashi Toyoshima <toyoshim@gmail.com>
  * @constructor
  * @extends {IRC}
@@ -106,7 +105,8 @@ GuIRC.prototype.handleJoin = function (nicks, channel) {
         var index = this._addUser(channel, nicks.nick);
         // Then, show a joining message.
         // TODO: We should have a setting to emit following message.
-        appendChannelMessage(index, '* ' + nicks.nick + 'が入室しました');
+        appendChannelMessage(index,
+                chrome.i18n.getMessage("ircJoin", [nicks.nick]));
     }
 };
 
@@ -128,8 +128,8 @@ GuIRC.prototype.handleNick = function (nicks, nick) {
             target.nick = nick;
             var index = this._addUser(channel, nick);
             // TODO: Emit multicast to common log view.
-            appendChannelMessage(index, '* ' + nicks.nick + 'がNICKを' + nick +
-                    'に変更しました');
+            appendChannelMessage(index,
+                    chrome.i18n.getMessage("ircNick", [nicks.nick, nick]));
         }
     }
 };
@@ -141,8 +141,8 @@ GuIRC.prototype.handleNick = function (nicks, nick) {
 GuIRC.prototype.handlePart = function (nicks, channel, message) {
     if (this._removeUser(channel, nicks.nick)) {
         var index = channelIndex(channel);
-        appendChannelMessage(index, '* ' + nicks.nick + 'が退室しました ' + '(' +
-            message + ')');
+        appendChannelMessage(index,
+                chrome.i18n.getMessage("ircPart", [nicks.nick, message]));
         // TODO: [optional] Remove channel tab.
     }
 };
@@ -169,7 +169,8 @@ GuIRC.prototype.handlePrivateMessage = function (nicks, target, message) {
         if (index < 0) {
             // Open private message tab with sender nick.
             this.channels[nicks.nick] = {
-                topic: nicks.nick + 'からのプライベートメッセージ',
+                topic: chrome.i18n.getMessage("ircPrivateChannel",
+                        [nicks.nick]),
                 nicks: [
                     { op: false, nick: nicks.nick },
                     { op: false, nick: this.nick }
@@ -199,8 +200,8 @@ GuIRC.prototype.handleQuit = function (nicks, message) {
         var target = this._removeUser(channel, nicks.nick);
         if (target) {
             var index = channelIndex(channel);
-            appendChannelMessage(index, '* ' +
-                nicks.nick + 'がログアウトしました (' + message + ')');
+            appendChannelMessage(index,
+                    chrome.i18n.getMessage("ircQuit", [nicks.nick, message]));
         }
     }
 };
@@ -212,8 +213,8 @@ GuIRC.prototype.handleQuit = function (nicks, message) {
 GuIRC.prototype.handleTopic = function (nicks, channel, topic) {
     var index = channelIndex(channel);
     if (nicks) {
-        appendChannelMessage(index, '* ' + nicks.nick + 'がトピックを「' +
-            topic + '」に変更しました')
+        appendChannelMessage(index,
+                chrome.i18n.getMessage("ircTopic", [nicks.nick, topic]));
     }
     this.channels[channel].topic = topic;
     if (activeTab == index)

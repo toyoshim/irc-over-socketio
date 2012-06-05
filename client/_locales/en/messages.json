@@ -74,5 +74,81 @@
     "configSubmit": {
         "message": "Save",
         "description": "Button title for save"
+    },
+    "ircPrivateChannel": {
+        "message": "Private messages from $nick$",
+        "description": "Title for private message tab",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            }
+        }
+    },
+    "ircJoin": {
+        "message": "* $nick$ has joined the channel",
+        "description": "Channel join message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            }
+        }
+    },
+    "ircNick": {
+        "message": "* $old$ is now known as $new$",
+        "description": "Nick change message",
+        "placeholders": {
+            "old": {
+                "content": "$1",
+                "example": "old_nick"
+            },
+            "new": {
+                "content": "$2",
+                "example": "new_nick"
+            }
+        }
+    },
+    "ircPart": {
+        "message": "* $nick$ has left the channel ($message$)",
+        "description": "Channel part message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            },
+            "message": {
+                "content": "$2",
+                "example": "bye."
+            }
+        }
+    },
+    "ircQuit": {
+        "message": "* $nick$ has left the server ($message$)",
+        "description": "Quit message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            },
+            "message": {
+                "content": "$2",
+                "example": "bye."
+            }
+        }
+    },
+    "ircTopic": {
+        "message": "* $nick$ has set topic: $topic$",
+        "description": "Channel topic message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            },
+            "topic": {
+                "content": "$2",
+                "example": "topic"
+            }
+        }
     }
 }

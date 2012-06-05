@@ -74,5 +74,81 @@
     "configSubmit": {
         "message": "保存",
         "description": "Button title for save"
+    },
+    "ircPrivateChannel": {
+        "message": "$nick$からのプライベートメッセージ",
+        "description": "Title for private message tab",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            }
+        }
+    },
+    "ircJoin": {
+        "message": "* $nick$が入室しました",
+        "description": "Channel join message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            }
+        }
+    },
+    "ircNick": {
+        "message": "* $old$がニックネームを$new$に変更しました",
+        "description": "Nick change message",
+        "placeholders": {
+            "old": {
+                "content": "$1",
+                "example": "old_nick"
+            },
+            "new": {
+                "content": "$2",
+                "example": "new_nick"
+            }
+        }
+    },
+    "ircPart": {
+        "message": "* $nick$が退室しました ($message$)",
+        "description": "Channel part message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            },
+            "message": {
+                "content": "$2",
+                "example": "bye."
+            }
+        }
+    },
+    "ircQuit": {
+        "message": "* $nick$がログアウトしました ($message$)",
+        "description": "Quit message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            },
+            "message": {
+                "content": "$2",
+                "example": "bye."
+            }
+        }
+    },
+    "ircTopic": {
+        "message": "* $nick$がトピックを「$topic$」に変更しました",
+        "description": "Channel topic message",
+        "placeholders": {
+            "nick": {
+                "content": "$1",
+                "example": "nick"
+            },
+            "topic": {
+                "content": "$2",
+                "example": "topic"
+            }
+        }
     }
 }
