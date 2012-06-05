@@ -25,12 +25,43 @@ in the LICENSE file.
     <script src="guirc.js"></script>
     <script src="gui.js"></script>
     <script src="setting.js"></script>
+    <script>
+        var i18n = function () {
+            $('#nav-main').text(chrome.i18n.getMessage('navMain'));
+            $('#nav-config').text(chrome.i18n.getMessage('navConfig'));
+            $('#main-server').text(chrome.i18n.getMessage('mainServer'));
+            $('#input').attr('placeholder', chrome.i18n.getMessage('mainPostHint'));
+            $('#main-member').text(chrome.i18n.getMessage('mainMember'));
+            $('#search').attr('placeholder', chrome.i18n.getMessage('mainSearchHint'));
+            $('#config-legend-proxy').text(chrome.i18n.getMessage('configLegendProxy'));
+            $('#config-label-proxy-host').text(chrome.i18n.getMessage('configLabelHost'));
+            $('#config-input-proxy-host').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
+            $('#config-label-proxy-port').text(chrome.i18n.getMessage('configLabelPort'));
+            $('#config-input-proxy-port').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
+            $('#config-label-proxy-password').text(chrome.i18n.getMessage('configLabelPassword'));
+            $('#config-input-proxy-password').attr('placeholder', chrome.i18n.getMessage('configOptionalHint'));
+            $('#config-legend-server').text(chrome.i18n.getMessage('configLegendServer'));
+            $('#config-label-server-host').text(chrome.i18n.getMessage('configLabelHost'));
+            $('#config-input-server-host').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
+            $('#config-label-server-port').text(chrome.i18n.getMessage('configLabelPort'));
+            $('#config-input-server-port').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
+            $('#config-label-server-password').text(chrome.i18n.getMessage('configLabelPassword'));
+            $('#config-input-server-password').attr('placeholder', chrome.i18n.getMessage('configOptionalHint'));
+            $('#config-legend-user').text(chrome.i18n.getMessage('configLegendUser'));
+            $('#config-label-nickname').text(chrome.i18n.getMessage('configLabelNickname'));
+            $('#config-input-nickname').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
+            $('#config-legend-notification').text(chrome.i18n.getMessage('configLegendNotification'));
+            $('#config-label-keywords').text(chrome.i18n.getMessage('configLabelKeywords'));
+            $('#config-input-keywords').attr('placeholder', chrome.i18n.getMessage('configKeywordsHint'));
+            $('#config-submit').text(chrome.i18n.getMessage('configSubmit'));
+        }
+    </script>
 </head>
 
-<body>
+<body onload="i18n();">
 <!-- --------------------------------------------------------------------------
 // Navigation menu bar;
-// [IRC over Socket.IO] [メイン] [設定]
+// [IRC over Socket.IO] [Main] [Preferences]
 --------------------------------------------------------------------------- -->
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
@@ -43,8 +74,8 @@ in the LICENSE file.
             <a class="brand" href="#about" onclick="activatePage(0);">IRC over Socket.IO</a>
             <div class="nav-collapse">
                 <ul id="main-menu" class="nav">
-                    <li><a href="#main" onclick="activatePage(1);"><i class="icon-comment icon-white"></i>メイン</a></li>
-                    <li class="active"><a href="#config" onclick="activatePage(2);"><i class="icon-cog icon-white"></i>設定</a></li>
+                    <li><a href="#main" onclick="activatePage(1);"><i class="icon-comment icon-white"></i> <span id="nav-main">Main</span></a></li>
+                    <li class="active"><a href="#config" onclick="activatePage(2);"><i class="icon-cog icon-white"></i> <span id="nav-config">Preferences</span></a></li>
                 </ul>
             </div>
         </div>
@@ -61,7 +92,7 @@ in the LICENSE file.
             <div class="page-header">
                 <h1>
                     IRC over Socket.IO&nbsp;
-                    <small>version 0.9.2 &copy 2012 Takashi Toyoshima</small>
+                    <small>version 0.9.3 &copy 2012 Takashi Toyoshima</small>
                 </h1>
             </div>
         </div>
@@ -128,7 +159,7 @@ in the LICENSE file.
 </div>
 
 <!-- --------------------------------------------------------------------------
-// Page 1; メイン
+// Page 1; Main
 --------------------------------------------------------------------------- -->
 <div class="container-fluid" style="display: none;">
     <div class="row-fluid">
@@ -136,7 +167,7 @@ in the LICENSE file.
             <div id="chat" class="span9">
                 <ul id="chat-tab" class="nav nav-tabs">
                     <li class="active">
-                        <a href="#" onclick="activateTab(0);"><i class="icon-home"></i> サーバ</a>
+                        <a href="#" onclick="activateTab(0);"><i class="icon-home"></i> <span id="main-server">Server</span></a>
                     </li>
                 </ul>
                 <h3 id="topic" style="height: 30px; overflow: auto; text-overflow: ellipsis;">&nbsp;</h3>
@@ -144,7 +175,7 @@ in the LICENSE file.
                     <div></div>
                 </div>
                 <form onsubmit="postMessage(); return false;">
-                    <input id="input" type="text" class="span9" placeholder="発言する文字を入力してリターンを押してください">
+                    <input id="input" type="text" class="span9" placeholder="Please type messages to post, then press enter.">
                 </form>
                 <div id="log"><!-- log message -->
                 </div>
@@ -152,8 +183,8 @@ in the LICENSE file.
         </div>
         <div id="users" class="span3">
             <form class="navbar-search pull-left">
-                <i class="icon-user"></i> 入室者一覧&nbsp;&nbsp;<i class="icon-search"></i>
-                <input id="search" type="text" class="search-qeury" style="width: 100px; border-radius: 12px" placeholder="検索" onkeyup="updateUsers();">
+                <i class="icon-user"></i> <span id="main-member">Members</span>&nbsp;&nbsp;<i class="icon-search"></i>
+                <input id="search" type="text" class="search-qeury" style="width: 100px; border-radius: 12px" placeholder="Search" onkeyup="updateUsers();">
             </form>
             <table class="table table-condensed">
                 <!-- user list
@@ -165,59 +196,59 @@ in the LICENSE file.
 </div>
 
 <!-- --------------------------------------------------------------------------
-// Page 2; 設定
+// Page 2; Preferences
 --------------------------------------------------------------------------- -->
 <div class="container" style="display: block;">
     <div id="alert">
     </div>
     <form id="config" class="well form-horizontal" onsubmit="saveConfig(); return false;">
         <fieldset>
-            <legend>プロキシ設定</legend>
+            <legend><span id="config-legend-proxy">Proxy information</span></legend>
             <div class="control-group">
-                <label class="control-label">ホスト名</label>
+                <label id="config-label-proxy-host" class="control-label">Hostname</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span3" type="text" placeholder="必須">
+                    <input id="config-input-proxy-host" class="span3" type="text" placeholder="Mandatory">
                 </div>
-                <label class="control-label">ポート番号</label>
+                <label id="config-label-proxy-port" class="control-label">Port</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span2" type="number" placeholder="必須">
+                    <input id="config-input-proxy-port" class="span2" type="number" placeholder="Mandatory">
                 </div>
-                <label class="control-label">パスワード</label>
+                <label id="config-label-proxy-password" class="control-label">Password</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span3" type="password" placeholder="オプション" value="">
+                    <input id="config-input-proxy-password" class="span3" type="password" placeholder="Optional" value="">
                 </div>
             </div>
-            <legend>IRCサーバ設定</legend>
+            <legend><span id="config-legend-server">IRC Server Settings</span></legend>
             <div class="control-group">
-                <label class="control-label">ホスト名</label>
+                <label id="config-label-server-host" class="control-label">Hostname</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span3" type="text" placeholder="必須" value="chat.freenode.net">
+                    <input id="config-input-server-host" class="span3" type="text" placeholder="Mandatory" value="chat.freenode.net">
                 </div>
-                <label class="control-label">ポート番号</label>
+                <label id="config-label-server-port" class="control-label">Port</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span2" type="number" placeholder="必須" value="6665">
+                    <input id="config-input-server-port" class="span2" type="number" placeholder="Mandatory" value="6665">
                 </div>
-                <label class="control-label">パスワード</label>
+                <label id="config-label-server-password" class="control-label">Password</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span3" type="password" placeholder="オプション" value="">
+                    <input id="config-input-server-password" class="span3" type="password" placeholder="Optional" value="">
                 </div>
             </div>
-            <legend>ユーザー設定</legend>
+            <legend><span id="config-legend-user">User Settings</span></legend>
             <div class="control-group">
-                <label class="control-label">ニックネーム</label>
+                <label id="config-label-nickname" class="control-label">Nickname</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span3" type="text" placeholder="必須" value="">
+                    <input id="config-input-nickname" class="span3" type="text" placeholder="Mandatory" value="">
                 </div>
             </div>
-            <legend>通知設定</legend>
+            <legend><span id="config-legend-notification">Notification Settings</span></legend>
             <div class="control-group">
-                <label class="control-label">キーワード</label>
+                <label id="config-label-keywords" class="control-label">Keywords</label>
                 <div class="controls docs-input-sizes">
-                    <input class="span5" type="text" placeholder="オプション（カンマ区切りで複数指定可能）" value="">
+                    <input id="config-input-keywords" class="span5" type="text" placeholder="Optional (comma separated words)" value="">
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary">保存</button>
+            <button id="config-submit" type="submit" class="btn btn-primary">Save</button>
         </fieldset>
     </form>
 </div>

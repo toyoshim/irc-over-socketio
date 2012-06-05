@@ -1,0 +1,78 @@
+{
+    "navMain": {
+        "message": "メイン",
+        "description": "Main item in navigation menu"
+    },
+    "navConfig": {
+        "message": "設定",
+        "description": "Preferences item in navigation menu"
+    },
+    "mainServer": {
+        "message": "サーバ",
+        "description": "Tab title for server message"
+    },
+    "mainPostHint": {
+        "message": "発言する文字を入力してリターンを押してください",
+        "description": "Placeholder message for message post form"
+    },
+    "mainMember": {
+        "message": "入室者一覧",
+        "description": "Title for member list area"
+    },
+    "mainSearchHint": {
+        "message": "検索",
+        "description": "Placeholder message for search form"
+    },
+    "configLegendProxy": {
+        "message": "プロキシ設定",
+        "description": "Legend title for proxy information"
+    },
+    "configLegendServer": {
+        "message": "IRCサーバ設定",
+        "description": "Legend title for server settings"
+    },
+    "configLegendUser": {
+        "message": "ユーザー設定",
+        "description": "Legend title for user settings"
+    },
+    "configLegendNotification": {
+        "message": "通知設定",
+        "description": "Legend title for notification settings"
+    },
+    "configLabelNickname": {
+        "message": "ニックネーム",
+        "description": "Label title for nickname"
+    },
+    "configLabelKeywords": {
+        "message": "キーワード",
+        "description": "Label title for keywords"
+    },
+    "configLabelHost": {
+        "message": "ホスト名",
+        "description": "Label title for hostname"
+    },
+    "configLabelPort": {
+        "message": "ポート番号",
+        "description": "Label title for port"
+    },
+    "configLabelPassword": {
+        "message": "パスワード",
+        "description": "Label title for password"
+    },
+    "configMandatoryHint": {
+        "message": "必須",
+        "description": "Placeholder message for mandatory items"
+    },
+    "configOptionalHint": {
+        "message": "オプション",
+        "description": "Placeholder message for optional items"
+    },
+    "configKeywordsHint": {
+        "message": "オプション（カンマ区切りで複数指定可能）",
+        "description": "Placeholder message for keywords"
+    },
+    "configSubmit": {
+        "message": "保存",
+        "description": "Button title for save"
+    }
+}

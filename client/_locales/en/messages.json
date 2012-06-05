@@ -1,0 +1,78 @@
+{
+    "navMain": {
+        "message": "Main",
+        "description": "Main item in navigation menu"
+    },
+    "navConfig": {
+        "message": "Preferences",
+        "description": "Preferences item in navigation menu"
+    },
+    "mainServer": {
+        "message": "Server",
+        "description": "Tab title for server message"
+    },
+    "mainPostHint": {
+        "message": "Please type messages to post, then press enter.",
+        "description": "Placeholder message for message post form"
+    },
+    "mainMember": {
+        "message": "Members",
+        "description": "Title for member list area"
+    },
+    "mainSearchHint": {
+        "message": "Search",
+        "description": "Placeholder message for search form"
+    },
+    "configLegendProxy": {
+        "message": "Proxy Settings",
+        "description": "Legend title for proxy settings"
+    },
+    "configLegendServer": {
+        "message": "IRC Server Settings",
+        "description": "Legend title for IRC server settings"
+    },
+    "configLegendUser": {
+        "message": "User Settings",
+        "description": "Legend title for user settings"
+    },
+    "configLegendNotification": {
+        "message": "Notification Settings",
+        "description": "Legend title for notification settings"
+    },
+    "configLabelNickname": {
+        "message": "Nickname",
+        "description": "Label title for nickname"
+    },
+    "configLabelKeywords": {
+        "message": "Keywords",
+        "description": "Label title for keywords"
+    },
+    "configLabelHost": {
+        "message": "Hostname",
+        "description": "Label title for hostname"
+    },
+    "configLabelPort": {
+        "message": "Port",
+        "description": "Label title for port"
+    },
+    "configLabelPassword": {
+        "message": "Password",
+        "description": "Label title for password"
+    },
+    "configMandatoryHint": {
+        "message": "Mandatory",
+        "description": "Placeholder message for mandatory items"
+    },
+    "configOptionalHint": {
+        "message": "Optional",
+        "description": "Placeholder message for optional items"
+    },
+    "configKeywordsHint": {
+        "message": "Optional (comma separated words)",
+        "description": "Placeholder message for keywords"
+    },
+    "configSubmit": {
+        "message": "Save",
+        "description": "Button title for save"
+    }
+}

@@ -8,6 +8,7 @@
  * GUI integration. GuIRC extends IRC to handle IRC protocol, and uses gui.js
  * functions to integrate IRC to GUI.
  * TODO: Move localStorage related codes to gui.js.
+ * TODO: i18n.
  * @author Takashi Toyoshima <toyoshim@gmail.com>
  * @constructor
  * @extends {IRC}
