@@ -6,7 +6,6 @@
  */
 /**
  * IRC client.
- * TODO: Handle self nick change.
  * @author Takashi Toyoshima <toyoshim@gmail.com>
  * @param {string} proxy_server Proxy server host name.
  * @param {number} proxy_port Proxy server port number.
@@ -25,124 +24,63 @@ function IRC (proxy_server, proxy_port, proxy_pass, server, port, pass, nick) {
     this._port = port;
     this._pass = pass;
     this._nick = nick;
-    this._proxy_state = IRC._PROXY_DISCONNECTED;
     this._names = [];
     this._channel = '';  // Current channel (used in _name(), and _nameEnd())
     this._joined = {};
-    this._io = null;
+    this._socket = null;
+    this._buffer = '';
 }
 
-// Proxy state definition.
-IRC._PROXY_DISCONNECTED = 0;
-IRC._PROXY_IDLE = 1;
-IRC._PROXY_CONNECTING = 2;
-IRC._PROXY_OPEN = 3;
-
 /**
- * Starts to establish connection between proxy server.
+ * Connect to a server.
  */
 IRC.prototype.connect = function () {
-    // Create Socket.IO channel to the proxy server.
-    this._io = new io.Socket(this._proxy_server, { port: this._proxy_port });
-    this._io._irc = this;
+    // Create abstract TCP channel.
+    this._socket = TCPClient.createTCPClient({
+        type: TCPClient.TYPE_SOCKETIO,
+        proxy_server: this._proxy_server,
+        proxy_port: this._proxy_port,
+        proxy_pass: this._proxy_pass
+    });
 
     // Register handlers.
-    this._io.on('connect', function () {
-        // Socket.IO connection established.
-        console.info('proxy connection established');
-        this._irc._proxy_state = IRC._PROXY_IDLE;
-    });
-    this._io.on('message', function (data) {
-        // TODO: We must handle data line by line, also here.
-        // Socket.IO receives a message.
-        var irc = this._irc;
+    this._socket.onconnect = this._onconnect.bind(this);
+    this._socket.onreceive = this._onreceive.bind(this);
+    this._socket.ondisconnect = this._ondisconnect.bind(this);
 
-        // Call IRC protocol handler.
-        if (irc._proxy_state == IRC._PROXY_OPEN)
-            return irc._receive(data);
-
-        // Handle proxy handshake.
-        // See also server/app.js.
-        var cmd = data.split(' ')[0];
-        if ((irc._proxy_state == IRC._PROXY_IDLE) && (cmd == 'HELLO')) {
-            // 'HELLO [message] (<nonce>)'
-            console.info('proxy connected: ' + data);
-            var nonce = data.match(/\(([^)]+)\)/i)[1];
-            console.info('proxy nonce: ' + nonce);
-            var digest = null;
-            if (irc._proxy_pass) {
-                // Send 'DIGEST <md5(<nonce>:<password>)>' before 'CONNECT'.
-                // Will receive 'DISCONNECTED [message]' if the value wrong.
-                digest = MD5.createDigestString(nonce + ':' + irc._proxy_pass);
-                console.log('proxy digest: ' + digest);
-                irc.send('DIGEST ' + digest);
-            }
-            // Send 'CONNECT <server> <port>'.
-            irc._proxy_state = IRC._PROXY_CONNECTING;
-            console.info('proxy connecting ' + irc._server + ':' + irc._port);
-            irc.send('CONNECT ' + irc._server + ' ' + irc._port);
-            return;
-        }
-        if (irc._proxy_state == IRC._PROXY_CONNECTING) {
-            if (cmd == 'DISCONNECTED') {
-                // Maybe digest was wrong, or IRC server rejected.
-                console.info('proxy reject connection: ' + data);
-                irc._proxy_state = IRC._PROXY_DISCONNECTED;
-                return;
-            } else if (cmd == 'CONNECTED') {
-                // Pass proxy authorization and IRC server connection.
-                var hostport = irc._server + ':' + irc._port;
-                console.info('proxy connected to ' + hostport);
-                // Initialize connection dependent variables.
-                irc._proxy_state = IRC._PROXY_OPEN;
-                irc._receivedBuffer = '';
-                irc._names = [];
-                irc._channel = '';
-                irc._joined = {};
-                if (irc._pass)
-                    irc.send('PASS ' + irc._pass);
-                irc.send('NICK ' + irc._nick);
-                irc.send([
-                    'USER', irc._nick, 'localhost', irc._server, 'irc.js'
-                ].join(' '));
-                return;
-            }
-        }
-        console.info('unknown proxy response: ' + data);
-    });
-    this._io.on('disconnect', function () {
-        console.info('proxy disconnected ... try to reconnect after 1 sec');
-        var irc = this._irc;
-        if (irc._proxy_state != IRC._PROXY_DISCONNECTED) {
-            irc._proxy_state = IRC._PROXY_DISCONNECTED;
-            var func = function () { irc.connect(); };
-            setTimeout(func, 1000);
-        }
-    });
-
-    // Start to establish connection to the proxy.
-    console.info('connecting to proxy');
-    this._io.connect();
+    // Connect.
+    console.info('connecting to a server');
+    this._socket.connect(this._server, this._port);
 };
 
 /**
- * Disconnects the established connection to the proxy server.
- */
-IRC.prototype.disconnect = function () {
-    this._irc._proxy_state = IRC._PROXY_DISCONNECTED;
-    this._io.disconnect();
-};
-
-/**
- * Handles receiving messages and split it into lines.
- * @param <string> data Receiving message
+ * Handle onconnect event from a socket.
  * @private
  */
-IRC.prototype._receive = function (data) {
-    // TODO: Following line handing must be done at on('message') handler.
-    var lines = (this._receivedBuffer + data).split('\n');
+IRC.prototype._onconnect = function () {
+    // Initialize connection dependent variables.
+    this._names = [];
+    this._channel = '';
+    this._joined = {};
+    this._buffer = '';
+    if (this._pass)
+        this.send('PASS ' + this._pass);
+    this.send('NICK ' + this._nick);
+    this.send([
+        'USER', this._nick, 'localhost', this._server, 'IRC over Socket.IO'
+    ].join(' '));
+};
+
+/**
+ * Handles onreceive event from a socket. Split received data into messages
+ * line by line.
+ * @param data {string} received data
+ * @private
+ */
+IRC.prototype._onreceive = function (data) {
+    var lines = (this._buffer + data).split('\n');
     var lastLine = lines.length - 1;
-    this._receivedBuffer = lines[lastLine];
+    this._buffer = lines[lastLine];
     for (var i = 0; i < lastLine; i++) {
         if (lines[i].charAt(lines[i].length - 1) == '\r')
             lines[i] = lines[i].slice(0, lines[i].length - 1);
@@ -153,6 +91,23 @@ IRC.prototype._receive = function (data) {
             console.error(lines[i]);
         }
     }
+};
+
+/**
+ * Handle ondisconnect event from a socket.
+ * @private
+ */
+IRC.prototype._ondisconnect = function () {
+    console.info('disconnected ... try to reconnect after 5 sec');
+    this._socket = null;
+    setTimeout(this.connect.bind(this), 5000);
+};
+
+/**
+ * Disconnects the established connection to the proxy server.
+ */
+IRC.prototype.disconnect = function () {
+    this._socket.disconnect();
 };
 
 /**
@@ -311,7 +266,7 @@ IRC.prototype._nameEnd = function (nick, channel) {
  * @param {string} message A RFC1459 message line excluding tailing <crlf>.
  */
 IRC.prototype.send = function (message) {
-    this._io.send(message + '\r\n');
+    this._socket.send(message + '\r\n');
 };
 
 /**

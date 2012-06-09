@@ -1,7 +1,7 @@
 {
   "name": "IRC over Socket.IO",
   "description": "IRC over Socket.IO",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "default_locale": "en",
   "app": {
     "launch": {
