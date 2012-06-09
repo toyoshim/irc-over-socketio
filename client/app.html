@@ -20,9 +20,11 @@ in the LICENSE file.
     <script>exports = {}</script>
     <script src="jquery.min.js"></script>
     <script src="socket.io.min.js"></script>
+    <script src="DNS.js"></script>
     <script src="MD5.js"></script>
     <script src="tcpclient.js"></script>
     <script src="tcpclient_socketio.js"></script>
+    <script src="tcpclient_chromesocket.js"></script>
     <script src="irc.js"></script>
     <script src="guirc.js"></script>
     <script src="gui.js"></script>
@@ -36,6 +38,9 @@ in the LICENSE file.
             $('#main-member').text(chrome.i18n.getMessage('mainMember'));
             $('#search').attr('placeholder', chrome.i18n.getMessage('mainSearchHint'));
             $('#config-legend-proxy').text(chrome.i18n.getMessage('configLegendProxy'));
+            $('#config-label-proxy-type').text(chrome.i18n.getMessage('configLabelConnectionType'));
+            $('#config-span-proxy-socketio').text(chrome.i18n.getMessage('configConnectionSocketIO'));
+            $('#config-span-proxy-chromesocket').text(chrome.i18n.getMessage('configConnectionChromeSocket'));
             $('#config-label-proxy-host').text(chrome.i18n.getMessage('configLabelHost'));
             $('#config-input-proxy-host').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
             $('#config-label-proxy-port').text(chrome.i18n.getMessage('configLabelPort'));
@@ -207,6 +212,13 @@ in the LICENSE file.
         <fieldset>
             <legend><span id="config-legend-proxy">Proxy information</span></legend>
             <div class="control-group">
+                <label id="config-label-proxy-type" class="control-label">Connection Type</label>
+                <div class="controls docs-input-sizes">
+                    <label class="radio">
+                        <input type="radio" name="connection-type" checked><span id="config-span-proxy-socketio">Socket.IO Proxy</span><br>
+                        <input type="radio" name="connection-type"><span id="config-span-proxy-chromesocket">Direct Connection (chrome.socket)</span><br>
+                    </label>
+                </div>
                 <label id="config-label-proxy-host" class="control-label">Hostname</label>
                 <div class="controls docs-input-sizes">
                     <input id="config-input-proxy-host" class="span3" type="text" placeholder="Mandatory">

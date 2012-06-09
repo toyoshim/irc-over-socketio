@@ -7,5 +7,6 @@ client/css
 client/img
 client/jquery.min.js
 client/socket.io.min.js
+client/DNS.js
 client/MD5.js
 tools

@@ -47,6 +47,10 @@
         "message": "キーワード",
         "description": "Label title for keywords"
     },
+    "configLabelConnectionType": {
+        "message": "接続方法",
+        "description": "Label title for connection type"
+    },
     "configLabelHost": {
         "message": "ホスト名",
         "description": "Label title for hostname"
@@ -58,6 +62,14 @@
     "configLabelPassword": {
         "message": "パスワード",
         "description": "Label title for password"
+    },
+    "configConnectionSocketIO": {
+        "message": "Socket.IO プロキシ",
+        "description": "Title for Socket.IO proxy connection type"
+    },
+    "configConnectionChromeSocket": {
+        "message": "ダイレクト接続 (chrome.socket)",
+        "description": "Title for chrome.socket direct connection type"
     },
     "configMandatoryHint": {
         "message": "必須",

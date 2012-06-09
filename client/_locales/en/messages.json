@@ -47,6 +47,10 @@
         "message": "Keywords",
         "description": "Label title for keywords"
     },
+    "configLabelConnectionType": {
+        "message": "Connection Type",
+        "description": "Label title for connection type"
+    },
     "configLabelHost": {
         "message": "Hostname",
         "description": "Label title for hostname"
@@ -58,6 +62,14 @@
     "configLabelPassword": {
         "message": "Password",
         "description": "Label title for password"
+    },
+    "configConnectionSocketIO": {
+        "message": "Socket.IO Proxy",
+        "description": "Title for Socket.IO proxy connection type"
+    },
+    "configConnectionChromeSocket": {
+        "message": "Direct Connection (chrome.socket)",
+        "description": "Title for chrome.socket direct connection type"
     },
     "configMandatoryHint": {
         "message": "Mandatory",

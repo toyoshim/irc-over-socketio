@@ -16,10 +16,11 @@ run:
 checkout:
 	mkdir third_party
 	(cd third_party; git clone https://code.google.com/p/jslt/)
-	(cd third_party/jslt; git checkout c9e8df5d75c95275986f7ddfc57390abcf3ecfd9)
+	(cd third_party/jslt; git checkout f09575967e18741dc952a7c4f8f9ef0de1b632f6)
 	cp third_party/jslt/MD5.js server/
 	cp third_party/jslt/MD5.js client/
 	cp third_party/jslt/ArrayBuffer.js server/
+	cp third_party/jslt/DNS.js client/
 	(cd server; PATH=`pwd`/../tools/node-0.4.7/bin:${PATH} npm install)
 	cp server/node_modules/socket.io/support/socket.io-client/socket.io.min.js client/
 	(cd third_party; wget http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js)

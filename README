@@ -24,7 +24,7 @@ Server setup for heroku
  $ git init
  $ git add .
  $ git commit -m "deploy to heroku"
- $ heroku create <name>
+ $ heroku create <name> --stack cdar
  $ heroku config:add PASSWORD=<password>
  $ heroku ps:scale web=1
  $ git push heroku master

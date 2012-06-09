@@ -13,6 +13,7 @@
     "128": "icon.png"
   },
   "permissions": [
-    "http://*/*"
+    "http://*/*",
+    "experimental"
   ]
 }
