@@ -28,7 +28,7 @@ var MD5 = require('./MD5').MD5;
 // Setup
 //-----------------------------------------------------------------------------
 // Set version number.
-var version = '0.9.0';
+var version = '0.9.4';
 
 // Check password setting.
 var pass = process.env.PASSWORD;
@@ -92,13 +92,22 @@ var doHandshake = function (client, message) {
             // Digest mismatch.
             console.log('client digest mismatch: ' + clientDigest);
             client.work.state = STATE.DISCONNECTED;
-            client.send('DISCONNECTED digest mismatch\r\n');
+            client.send('DISCONNECTED digest mismatch\n');
             client.emit('disconnect');
         } else {
             // Digest match.
             client.work.digest = digest;
         }
-    } else if (client.work.digest && command == 'CONNECT') {
+    } else if (command == 'CONNECT') {
+        if (!client.work.digest) {
+            // Digest is not receive.
+            console.log('client digest is missing\n');
+            client.work.state = STATE.DISCONNECTED;
+            client.send('DISCONNECTED digest required\n');
+            client.emit('disconnect');
+            return;
+        }
+
         // CONNECT request without DIGEST authentication will be ignored.
         // Handle 'CONNECT <host> <port>'.
         var args = message.split(' ');
@@ -116,7 +125,7 @@ var doHandshake = function (client, message) {
         // Register handlers for a socket to the remote IRC server.
         client.work.irc.on('connect', function () {
             // Connect to IRC server.
-            var hostport = client.host + ':' + client.port;
+            var hostport = client.work.irc.host + ':' + client.work.irc.port;
             client.work.state = STATE.CONNECTED;
             client.send('CONNECTED to ' + hostport + '\n');
             console.log('client proxy connected');
@@ -128,13 +137,14 @@ var doHandshake = function (client, message) {
         client.work.irc.on('end', function () {
             // Detect EOF on connection to the IRC server.
             client.work.state = STATE.DISCONNECTED;
-            client.send('DISCONNECTED from ' + host + ':' + port + '\n');
+            client.send('DISCONNECTED from ' + client.work.irc.host + ':' +
+                    client.work.irc.port + '\n');
             client.emit('disconnect');
         });
         client.work.irc.on('error', function () {
             console.log('client proxy connection failed');
             client.work.state = STATE.DISCONNECTED;
-            var hostport = host + ':' + port;
+            var hostport = client.work.irc.host + ':' + client.work.irc.port;
             client.send('DISCONNECTED from ' + hostport + 'for an error\n');
             client.emit('disconnect');
         });
@@ -189,5 +199,5 @@ io.on('connection', function (client) {
     fs.close(fd);
 
     // Send HELLO.
-    client.send('HELLO ij v' + version + ' (' + client.work.nonce + ')');
+    client.send('HELLO ij v' + version + ' (' + client.work.nonce + ')\n');
 });
