@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 /**
- * TCP client.
+ * TCP client over Socket.IO.
  * @author Takashi Toyoshima <toyoshim@gmail.com>
  * @constructor
  */
@@ -165,7 +165,7 @@ TCPClientSocketIO.prototype.connect = function (server, port) {
 /**
  * Disconnect from the server.
  */
-TCPClient.prototype.disconnect = function () {
+TCPClientSocketIO.prototype.disconnect = function () {
     this._io.disconnect();
     this._io = null;
 };
@@ -174,6 +174,6 @@ TCPClient.prototype.disconnect = function () {
  * Send text data to the server.
  * @param data {string} data to send.
  */
-TCPClient.prototype.send = function (data) {
+TCPClientSocketIO.prototype.send = function (data) {
     this._io.send(data);
 };
