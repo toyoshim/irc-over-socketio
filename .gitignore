@@ -3,6 +3,9 @@ third_party
 server/node_modules
 server/ArrayBuffer.js
 server/MD5.js
+client/css
+client/img
 client/jquery.min.js
 client/socket.io.min.js
 client/MD5.js
+tools
