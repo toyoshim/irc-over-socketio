@@ -42,7 +42,7 @@ setup: tools/node-0.4.7/bin/node tools/node-0.4.7/bin/npm tools/node-0.4.7/bin/l
 tools/node-0.4.7/bin/node:
 	mkdir -p tools/node-0.4.7/src
 	(cd tools/node-0.4.7/src; wget http://nodejs.org/dist/node-v0.4.7.tar.gz; tar zxf node-v0.4.7.tar.gz)
-	(cd tools/node-0.4.7/src/node-v0.4.7; ./configure --prefix=`pwd`/../..; make; make install)
+	(cd tools/node-0.4.7/src/node-v0.4.7; ./configure --prefix=`pwd`/../.. --without-ssl; make; make install)
 
 tools/node-0.4.7/bin/npm:
 	(cd tools/node-0.4.7/src; wget http://npmjs.org/install.sh; PATH=`pwd`/../bin:${PATH} /bin/sh install.sh)
@@ -52,4 +52,4 @@ tools/node-0.4.7/bin/lessc:
 
 tools/UglifyJS/bin/uglifyjs:
 	(cd tools; git clone https://github.com/mishoo/UglifyJS.git)
-	(cd tools/UglifyJS: git checkout a3fcb0d2aa8b3b78193dbe2b59994a5b65d552a4)
+	(cd tools/UglifyJS; git checkout a3fcb0d2aa8b3b78193dbe2b59994a5b65d552a4)
