@@ -9,4 +9,5 @@ client/jquery.min.js
 client/socket.io.min.js
 client/DNS.js
 client/MD5.js
+client/Unicode.js
 tools

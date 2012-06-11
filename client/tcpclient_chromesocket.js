@@ -61,11 +61,8 @@ TCPClientChromeSocket.prototype._read = function (readInfo) {
 
     var array = [];
     var length = readInfo.data.byteLength;
-    var u8array = new Uint8Array(readInfo.data);
-    // TODO: Convert UTF8 to UTF16 here.
-    for (var i = 0; i < length; ++i)
-        array.push(String.fromCharCode(u8array[i]));
-    this.onreceive(array.join(''));
+    // TODO: Network might split a surrogate pair to fragmented frames.
+    this.onreceive(Unicode.createStringFromUTF8ArrayBuffer(readInfo.data));
     this._socket.read(this._socketId, this._read.bind(this));
 };
 
@@ -81,12 +78,9 @@ TCPClientChromeSocket.prototype.disconnect = function () {
  * @param data {string} data to send.
  */
 TCPClientChromeSocket.prototype.send = function (data) {
-    // TODO: Convert UTF16 to UTF8 here.
-    var length = data.length;
-    var array = new Uint8Array(length);
-    for (var i = 0; i < length; ++i)
-        array[i] = data.charCodeAt(i);
-    this._socket.write(this._socketId, array.buffer, this._sent.bind(this));
+    this._socket.write(this._socketId,
+            Unicode.createUTF8ArrayBufferFromString(data),
+            this._sent.bind(this));
 };
 
 TCPClientChromeSocket.prototype._sent = function (writeInfo) {
