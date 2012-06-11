@@ -27,9 +27,9 @@ TCPClientChromeSocket.prototype.constructor = TCPClientChromeSocket;
  */
 TCPClientChromeSocket.prototype.connect = function (server, port) {
     this._server = server;
-    this._port = port;
+    this._port = Number(port);
     console.info('Resolving address for ' + server);
-    this._dns.resolve(server, this._resolved.bind(this));
+    this._dns.resolveA(server, this._resolved.bind(this));
 };
 
 TCPClientChromeSocket.prototype._resolved = function (addresses) {
@@ -65,7 +65,7 @@ TCPClientChromeSocket.prototype._read = function (readInfo) {
     // TODO: Convert UTF8 to UTF16 here.
     for (var i = 0; i < length; ++i)
         array.push(String.fromCharCode(u8array[i]));
-    this.onmessage(array.join(''));
+    this.onreceive(array.join(''));
     this._socket.read(this._socketId, this._read.bind(this));
 };
 
