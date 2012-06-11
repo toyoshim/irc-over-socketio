@@ -20,7 +20,8 @@ TCPClient.OPEN = 2;
 
 // TCPClientOptions.type.
 TCPClient.TYPE_SOCKETIO = 0;
-TCPClient.TYPE_CHROMESOCKET = 1;
+TCPClient.TYPE_WEBSOCKET = 1;
+TCPClient.TYPE_CHROMESOCKET = 2;
 
 /**
  * Create TCPClient object.
@@ -32,9 +33,6 @@ TCPClient.TYPE_CHROMESOCKET = 1;
  *         proxy_pass {string} Socket.IO to TCP proxy server password.
  */
 TCPClient.createTCPClient = function (options) {
-    // TODO: Remove following one line for test.
-    return new TCPClientChromeSocket();
-
     if (options.type == TCPClient.TYPE_SOCKETIO)
         return new TCPClientSocketIO(
                 options.proxy_server, options.proxy_port, options.proxy_pass);

@@ -62,7 +62,11 @@ var addAlert = function (alert) {
 var restoreConfig = function () {
     var id = 0;
     var form = $('#config input');
+    if (localStorage.connectionType == TCPClient.TYPE_SOCKETIO)
+        form.eq(id).attr('checked', true);
     id++;
+    if (localStorage.connectionType == TCPClient.TYPE_CHROMESOCKET)
+        form.eq(id).attr('checked', true);
     var socket = chrome.socket ||
             (chrome.experimental && chrome.experimental.socket);
     form.eq(id++).attr('disabled', !socket);
@@ -89,17 +93,21 @@ var saveConfig = function () {
     clearAlert();
     var id = 0;
     var form = $('#config input');
-    id++; // Socket.IO
-    id++; // chrome.socket
+    var type = TCPClient.TYPE_SOCKETIO;
+    if (form.eq(id++).attr('checked'))
+        type = TCPClient.TYPE_SOCKETIO;
+    if (form.eq(id++).attr('checked'))
+        type = TCPClient.TYPE_CHROMESOCKET;
+    localStorage.connectionType = type;
     var proxyHost = form.eq(id++).val();
-    if (!proxyHost)
+    if (type != TCPClient.TYPE_CHROMESOCKET && !proxyHost)
         addAlert("プロキシ設定のホスト名を指定してください");
     else
         localStorage.proxyHost = proxyHost;
     var proxyPort = form.eq(id++).val();
-    if (!proxyPort)
+    if (type != TCPClient.TYPE_CHROMESOCKET && !proxyPort)
         addAlert("プロキシ設定のポート番号を指定してください");
-    else if (!isValidNumber(proxyPort))
+    else if (type != TCPClient.TYPE_CHROMESOCKET && !isValidNumber(proxyPort))
         addAlert("プロキシ設定のポート番号は数字を指定してください");
     else
         localStorage.proxyPort = proxyPort;

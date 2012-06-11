@@ -24,9 +24,10 @@ function GuIRC () {
     this.keywords = [];  // @type {Array.<string>} Keyword list.
     if (localStorage.keywords)
         this.keywords = localStorage.keywords.split(',');
-    IRC.apply(this, [localStorage.proxyHost, localStorage.proxyPort,
-            localStorage.proxyPassword, localStorage.serverHost,
-            localStorage.serverPort, localStorage.serverPassword, this.nick]);
+    IRC.apply(this, [localStorage.connectionType, localStorage.proxyHost,
+            localStorage.proxyPort, localStorage.proxyPassword,
+            localStorage.serverHost, localStorage.serverPort,
+            localStorage.serverPassword, this.nick]);
 }
 GuIRC.prototype = new IRC();
 GuIRC.prototype.constructor = GuIRC;

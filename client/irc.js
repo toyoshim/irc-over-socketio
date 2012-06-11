@@ -7,6 +7,7 @@
 /**
  * IRC client.
  * @author Takashi Toyoshima <toyoshim@gmail.com>
+ * @param {number} connection_type Connection type.
  * @param {string} proxy_server Proxy server host name.
  * @param {number} proxy_port Proxy server port number.
  * @param {string} proxy_pass Proxy server password [optional].
@@ -16,7 +17,9 @@
  * @param {string} nick IRC nick name to use.
  * @constructor
  */
-function IRC (proxy_server, proxy_port, proxy_pass, server, port, pass, nick) {
+function IRC (connection_type, proxy_server, proxy_port, proxy_pass, server,
+        port, pass, nick) {
+    this._connection_type = connection_type;
     this._proxy_server = proxy_server;
     this._proxy_port = proxy_port;
     this._proxy_pass = proxy_pass;
@@ -37,7 +40,7 @@ function IRC (proxy_server, proxy_port, proxy_pass, server, port, pass, nick) {
 IRC.prototype.connect = function () {
     // Create abstract TCP channel.
     this._socket = TCPClient.createTCPClient({
-        type: TCPClient.TYPE_SOCKETIO,
+        type: this._connection_type,
         proxy_server: this._proxy_server,
         proxy_port: this._proxy_port,
         proxy_pass: this._proxy_pass
