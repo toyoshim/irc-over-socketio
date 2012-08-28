@@ -67,6 +67,10 @@
         "message": "Socket.IO Proxy",
         "description": "Title for Socket.IO proxy connection type"
     },
+    "configConnectionWebSocket": {
+        "message": "WebSocket Proxy",
+        "description": "Title for WebSocket proxy connection type"
+    },
     "configConnectionChromeSocket": {
         "message": "Direct Connection (chrome.socket)",
         "description": "Title for chrome.socket direct connection type"

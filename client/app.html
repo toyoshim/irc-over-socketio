@@ -26,6 +26,7 @@ in the LICENSE file.
     <script src="tcpclient.js"></script>
     <script src="tcpclient_socketio.js"></script>
     <script src="tcpclient_chromesocket.js"></script>
+    <script src="tcpclient_websocket.js"></script>
     <script src="irc.js"></script>
     <script src="guirc.js"></script>
     <script src="gui.js"></script>
@@ -41,6 +42,7 @@ in the LICENSE file.
             $('#config-legend-proxy').text(chrome.i18n.getMessage('configLegendProxy'));
             $('#config-label-proxy-type').text(chrome.i18n.getMessage('configLabelConnectionType'));
             $('#config-span-proxy-socketio').text(chrome.i18n.getMessage('configConnectionSocketIO'));
+            $('#config-span-proxy-websocket').text(chrome.i18n.getMessage('configConnectionWebSocket'));
             $('#config-span-proxy-chromesocket').text(chrome.i18n.getMessage('configConnectionChromeSocket'));
             $('#config-label-proxy-host').text(chrome.i18n.getMessage('configLabelHost'));
             $('#config-input-proxy-host').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
@@ -100,7 +102,7 @@ in the LICENSE file.
             <div class="page-header">
                 <h1>
                     IRC over Socket.IO&nbsp;
-                    <small>version 0.9.4 &copy 2012 Takashi Toyoshima</small>
+                    <small>version 0.9.5 &copy 2012 Takashi Toyoshima</small>
                 </h1>
             </div>
         </div>
@@ -217,6 +219,7 @@ in the LICENSE file.
                 <div class="controls docs-input-sizes">
                     <label class="radio">
                         <input type="radio" name="connection-type" checked><span id="config-span-proxy-socketio">Socket.IO Proxy</span><br>
+                        <input type="radio" name="connection-type"><span id="config-span-proxy-websocket">WebSocket Proxy</span><br>
                         <input type="radio" name="connection-type"><span id="config-span-proxy-chromesocket">Direct Connection (chrome.socket)</span><br>
                     </label>
                 </div>

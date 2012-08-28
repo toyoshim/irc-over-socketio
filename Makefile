@@ -19,6 +19,7 @@ checkout:
 	(cd third_party/jslt; git checkout c42ece7f62a686b1b6fc725ceff86187bf88cdd7)
 	cp third_party/jslt/MD5.js server/
 	cp third_party/jslt/MD5.js client/
+	cp third_party/jslt/MD5.js ws_proxy/
 	cp third_party/jslt/ArrayBuffer.js server/
 	cp third_party/jslt/DNS.js client/
 	cp third_party/jslt/Unicode.js client/
@@ -47,7 +48,7 @@ tools/node-0.4.7/bin/node:
 	(cd tools/node-0.4.7/src/node-v0.4.7; ./configure --prefix=`pwd`/../.. --without-ssl; make; make install)
 
 tools/node-0.4.7/bin/npm:
-	(cd tools/node-0.4.7/src; wget http://npmjs.org/install.sh; PATH=`pwd`/../bin:${PATH} /bin/sh install.sh)
+	(cd tools/node-0.4.7/src; wget --no-check-certificate https://npmjs.org/install.sh; PATH=`pwd`/../bin:${PATH} /bin/sh install.sh)
 
 tools/node-0.4.7/bin/lessc:
 	PATH=./tools/node-0.4.7/bin:${PATH} npm install -g less

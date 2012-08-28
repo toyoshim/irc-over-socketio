@@ -65,6 +65,9 @@ var restoreConfig = function () {
     if (localStorage.connectionType == TCPClient.TYPE_SOCKETIO)
         form.eq(id).attr('checked', true);
     id++;
+    if (localStorage.connectionType == TCPClient.TYPE_WEBSOCKET)
+        form.eq(id).attr('checked', true);
+    id++;
     if (localStorage.connectionType == TCPClient.TYPE_CHROMESOCKET)
         form.eq(id).attr('checked', true);
     var socket = chrome.socket ||
@@ -90,12 +93,13 @@ var restoreConfig = function () {
  * This function must be called to save the setting data.
  */
 var saveConfig = function () {
+    // TODO: i18n on alert messages.
     clearAlert();
-    var id = 0;
+    var id = 1;
     var form = $('#config input');
-    var type = TCPClient.TYPE_SOCKETIO;
+    var type = TCPClient.TYPE_SOCKETIO;  // id == 0
     if (form.eq(id++).attr('checked'))
-        type = TCPClient.TYPE_SOCKETIO;
+        type = TCPClient.TYPE_WEBSOCKET;
     if (form.eq(id++).attr('checked'))
         type = TCPClient.TYPE_CHROMESOCKET;
     localStorage.connectionType = type;

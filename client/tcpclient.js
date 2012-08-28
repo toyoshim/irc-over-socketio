@@ -36,6 +36,9 @@ TCPClient.createTCPClient = function (options) {
     if (options.type == TCPClient.TYPE_SOCKETIO)
         return new TCPClientSocketIO(
                 options.proxy_server, options.proxy_port, options.proxy_pass);
+    if (options.type == TCPClient.TYPE_WEBSOCKET)
+        return new TCPClientWebSocket(
+            options.proxy_server, options.proxy_port, options.proxy_pass);
     if (options.type == TCPClient.TYPE_CHROMESOCKET)
         return new TCPClientChromeSocket();
     return null;
