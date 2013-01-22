@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Takashi Toyoshima <toyoshim@gmail.com>
+ * Copyright (c) 2012, 2013, Takashi Toyoshima <toyoshim@gmail.com>
  * All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found
  * in the LICENSE file.
@@ -32,7 +32,7 @@ var showNotification = function (title, message) {
  *      2: Setting page.
  */
 var activatePage = function (index) {
-    if (!localStorage.valid)
+    if (!window.ios.settings.valid)
         return;
     var menu = $('#main-menu>li');
     var page = $('body>div');
@@ -145,9 +145,11 @@ var appendChannel = function (channel) {
     var tab = $('#chat-tab');
     var index = tabs++;
     var html = '<li name="' + channel +
-        '"><a href="#" onclick="activateTab(' + index +
-        ');"><i class="icon-remove"></i> ' + channel + '</a></li>';
+        '"><a id="tab' + index + '" href="#"><i class="icon-remove"></i> ' + channel + '</a></li>';
     tab.append($(html));
+    document.getElementById('tab' + index).addEventListener('click', function() {
+        activateTab(index);
+    }, false);
     var channels = $('#channels');
     channels.append($('<div></div>'));
     resizeGadgets();
@@ -285,12 +287,45 @@ window.onresize = resizeGadgets;
 
 // Runs at the start.
 $(function() {
+    // Install active page button handlers.
+    document.getElementById('page0').addEventListener('click', function() {
+        activatePage(0);
+    }, false);
+    document.getElementById('page1').addEventListener('click', function() {
+        activatePage(1);
+    }, false);
+    document.getElementById('page2').addEventListener('click', function() {
+        activatePage(2);
+    }, false);
+    document.getElementById('tab0').addEventListener('click', function() {
+        activateTab(0);
+    }, false);
+    document.getElementById('post').addEventListener('submit', function() {
+        postMessage();
+        return false;
+    }, false);
+    document.getElementById('search').addEventListener('keyup', function() {
+        updateUsers();
+    }, false);
+
     // Resize all gadgets.
     resizeGadgets();
     // Firstly, we might show the setting page.
-    restoreConfig();
-    // If we already have a valid configuration, show the main page.
-    // Main page activation will also create GuIRC object.
-    if (localStorage.valid)
-        activatePage(1);
+    chrome.storage.sync.get([
+        'valid',
+        'proxyHost',
+        'proxyPort',
+        'proxyPassword',
+        'serverHost',
+        'serverPort',
+        'serverPassword',
+        'nick',
+        'keywords'], function(settings) {
+        restoreConfig(settings);
+
+        // If we already have a valid configuration, show the main page.
+        // Main page activation will also create GuIRC object.
+        if (settings.valid)
+            activatePage(1);
+    });
 });

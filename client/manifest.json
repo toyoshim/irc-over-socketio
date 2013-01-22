@@ -1,11 +1,15 @@
 {
+  "manifest_version": 2,
   "name": "IRC over Socket.IO",
   "description": "IRC over Socket.IO",
-  "version": "0.9.5",
+  "version": "0.9.6",
+  "minimum_chrome_version": "24",
   "default_locale": "en",
   "app": {
-    "launch": {
-      "local_path": "app.html"
+    "background": {
+      "scripts": [
+        "background.js"
+      ]
     }
   },
   "icons": {
@@ -14,6 +18,13 @@
   },
   "permissions": [
     "http://*/*",
-    "experimental"
+    {
+      "socket": [
+        "tcp-connect",
+        "udp-bind",
+        "udp-send-to"
+      ]
+    },
+    "storage"
   ]
 }

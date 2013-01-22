@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Takashi Toyoshima <toyoshim@gmail.com>
+ * Copyright (c) 2012, 2013, Takashi Toyoshima <toyoshim@gmail.com>
  * All rights reserved.
  * Use of this source code is governed by a BSD-style license that can be found
  * in the LICENSE file.
@@ -7,7 +7,7 @@
 /**
  * GUI integration. GuIRC extends IRC to handle IRC protocol, and uses gui.js
  * functions to integrate IRC to GUI.
- * TODO: Move localStorage related codes to gui.js.
+ * TODO: Move window.ios.settings related codes to gui.js.
  * @author Takashi Toyoshima <toyoshim@gmail.com>
  * @constructor
  * @extends {IRC}
@@ -20,14 +20,15 @@ function GuIRC () {
                          //     nicks @type {Array.<boolean, string>} Users.
                          //         op @type {boolean} Operator permission.
                          //         nick @type {string} User nick.
-    this.nick = localStorage.nick;  // @type {string} Nick.
+    this.nick = window.ios.settings.nick;  // @type {string} Nick.
     this.keywords = [];  // @type {Array.<string>} Keyword list.
-    if (localStorage.keywords)
-        this.keywords = localStorage.keywords.split(',');
-    IRC.apply(this, [localStorage.connectionType, localStorage.proxyHost,
-            localStorage.proxyPort, localStorage.proxyPassword,
-            localStorage.serverHost, localStorage.serverPort,
-            localStorage.serverPassword, this.nick]);
+    if (window.ios.settings.keywords)
+        this.keywords = window.ios.settings.keywords.split(',');
+    IRC.apply(this, [window.ios.settings.connectionType,
+            window.ios.settings.proxyHost, window.ios.settings.proxyPort,
+            window.ios.settings.proxyPassword,
+            window.ios.settings.serverHost, window.ios.settings.serverPort,
+            window.ios.settings.serverPassword, this.nick]);
 }
 GuIRC.prototype = new IRC();
 GuIRC.prototype.constructor = GuIRC;

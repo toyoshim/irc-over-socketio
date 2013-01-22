@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns="http://www.w3.org/1999/html">
 <!--
-Copyright (c) 2012, Takashi Toyoshima <toyoshim@gmail.com>
+Copyright (c) 2012, 2013, Takashi Toyoshima <toyoshim@gmail.com>
 All rights reserved.
 Use of this source code is governed by a BSD-style license that can be found
 in the LICENSE file.
@@ -17,9 +17,10 @@ in the LICENSE file.
             padding-top: 60px;
         }
     </style>
-    <script>exports = {}</script>
+    <script src="import.js"></script>
     <script src="jquery.min.js"></script>
-    <script src="socket.io.min.js"></script>
+    <!-- TODO: Disable because of CSP breakage. See also, http://irc.hasb.ug/17
+    <script src="socket.io.min.js"></script-->
     <script src="DNS.js"></script>
     <script src="MD5.js"></script>
     <script src="Unicode.js"></script>
@@ -31,44 +32,10 @@ in the LICENSE file.
     <script src="guirc.js"></script>
     <script src="gui.js"></script>
     <script src="setting.js"></script>
-    <script>
-        var i18n = function () {
-            $('#nav-main').text(chrome.i18n.getMessage('navMain'));
-            $('#nav-config').text(chrome.i18n.getMessage('navConfig'));
-            $('#main-server').text(chrome.i18n.getMessage('mainServer'));
-            $('#input').attr('placeholder', chrome.i18n.getMessage('mainPostHint'));
-            $('#main-member').text(chrome.i18n.getMessage('mainMember'));
-            $('#search').attr('placeholder', chrome.i18n.getMessage('mainSearchHint'));
-            $('#config-legend-proxy').text(chrome.i18n.getMessage('configLegendProxy'));
-            $('#config-label-proxy-type').text(chrome.i18n.getMessage('configLabelConnectionType'));
-            $('#config-span-proxy-socketio').text(chrome.i18n.getMessage('configConnectionSocketIO'));
-            $('#config-span-proxy-websocket').text(chrome.i18n.getMessage('configConnectionWebSocket'));
-            $('#config-span-proxy-chromesocket').text(chrome.i18n.getMessage('configConnectionChromeSocket'));
-            $('#config-label-proxy-host').text(chrome.i18n.getMessage('configLabelHost'));
-            $('#config-input-proxy-host').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
-            $('#config-label-proxy-port').text(chrome.i18n.getMessage('configLabelPort'));
-            $('#config-input-proxy-port').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
-            $('#config-label-proxy-password').text(chrome.i18n.getMessage('configLabelPassword'));
-            $('#config-input-proxy-password').attr('placeholder', chrome.i18n.getMessage('configOptionalHint'));
-            $('#config-legend-server').text(chrome.i18n.getMessage('configLegendServer'));
-            $('#config-label-server-host').text(chrome.i18n.getMessage('configLabelHost'));
-            $('#config-input-server-host').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
-            $('#config-label-server-port').text(chrome.i18n.getMessage('configLabelPort'));
-            $('#config-input-server-port').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
-            $('#config-label-server-password').text(chrome.i18n.getMessage('configLabelPassword'));
-            $('#config-input-server-password').attr('placeholder', chrome.i18n.getMessage('configOptionalHint'));
-            $('#config-legend-user').text(chrome.i18n.getMessage('configLegendUser'));
-            $('#config-label-nickname').text(chrome.i18n.getMessage('configLabelNickname'));
-            $('#config-input-nickname').attr('placeholder', chrome.i18n.getMessage('configMandatoryHint'));
-            $('#config-legend-notification').text(chrome.i18n.getMessage('configLegendNotification'));
-            $('#config-label-keywords').text(chrome.i18n.getMessage('configLabelKeywords'));
-            $('#config-input-keywords').attr('placeholder', chrome.i18n.getMessage('configKeywordsHint'));
-            $('#config-submit').text(chrome.i18n.getMessage('configSubmit'));
-        }
-    </script>
+    <script src="i18n.js"></script>
 </head>
 
-<body onload="i18n();">
+<body>
 <!-- --------------------------------------------------------------------------
 // Navigation menu bar;
 // [IRC over Socket.IO] [Main] [Preferences]
@@ -81,11 +48,11 @@ in the LICENSE file.
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="#about" onclick="activatePage(0);">IRC over Socket.IO</a>
+            <a id="page0" class="brand" href="#about">IRC over Socket.IO</a>
             <div class="nav-collapse">
                 <ul id="main-menu" class="nav">
-                    <li><a href="#main" onclick="activatePage(1);"><i class="icon-comment icon-white"></i> <span id="nav-main">Main</span></a></li>
-                    <li class="active"><a href="#config" onclick="activatePage(2);"><i class="icon-cog icon-white"></i> <span id="nav-config">Preferences</span></a></li>
+                    <li><a id="page1" href="#main"><i class="icon-comment icon-white"></i> <span id="nav-main">Main</span></a></li>
+                    <li class="active"><a id="page2" href="#config"><i class="icon-cog icon-white"></i> <span id="nav-config">Preferences</span></a></li>
                 </ul>
             </div>
         </div>
@@ -102,13 +69,13 @@ in the LICENSE file.
             <div class="page-header">
                 <h1>
                     IRC over Socket.IO&nbsp;
-                    <small>version 0.9.5 &copy 2012 Takashi Toyoshima</small>
+                    <small>version 0.9.6 &copy 2012, 2013 Takashi Toyoshima</small>
                 </h1>
             </div>
         </div>
             <div class="span6 well">
                 <h2>New BSD License</h2>
-                <p>Copyright &copy 2012, Takashi Toyoshima &lt;toyoshim@gmail.com&gt;
+                <p>Copyright &copy 2012, 2013, Takashi Toyoshima &lt;toyoshim@gmail.com&gt;
                 <p>All rights reserved.
                 <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
                 <ul>
@@ -177,14 +144,14 @@ in the LICENSE file.
             <div id="chat" class="span9">
                 <ul id="chat-tab" class="nav nav-tabs">
                     <li class="active">
-                        <a href="#" onclick="activateTab(0);"><i class="icon-home"></i> <span id="main-server">Server</span></a>
+                        <a id="tab0" href="#"><i class="icon-home"></i> <span id="main-server">Server</span></a>
                     </li>
                 </ul>
                 <h3 id="topic" style="height: 30px; overflow: auto; text-overflow: ellipsis;">&nbsp;</h3>
                 <div id="channels"><!-- channel messages -->
                     <div></div>
                 </div>
-                <form onsubmit="postMessage(); return false;">
+                <form id="post">
                     <input id="input" type="text" class="span9" placeholder="Please type messages to post, then press enter.">
                 </form>
                 <div id="log"><!-- log message -->
@@ -194,7 +161,7 @@ in the LICENSE file.
         <div id="users" class="span3">
             <form class="navbar-search pull-left">
                 <i class="icon-user"></i> <span id="main-member">Members</span>&nbsp;&nbsp;<i class="icon-search"></i>
-                <input id="search" type="text" class="search-qeury" style="width: 100px; border-radius: 12px" placeholder="Search" onkeyup="updateUsers();">
+                <input id="search" type="text" class="search-qeury" style="width: 100px; border-radius: 12px" placeholder="Search">
             </form>
             <table class="table table-condensed">
                 <!-- user list
@@ -211,7 +178,7 @@ in the LICENSE file.
 <div class="container" style="display: block;">
     <div id="alert">
     </div>
-    <form id="config" class="well form-horizontal" onsubmit="saveConfig(); return false;">
+    <form id="config" class="well form-horizontal">
         <fieldset>
             <legend><span id="config-legend-proxy">Proxy information</span></legend>
             <div class="control-group">
