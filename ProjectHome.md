@@ -1,0 +1,1 @@
+![http://irc-over-socketio.googlecode.com/files/screenshot-1.png](http://irc-over-socketio.googlecode.com/files/screenshot-1.png)
